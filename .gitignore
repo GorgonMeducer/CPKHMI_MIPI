@@ -50,3 +50,13 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+*@*
+RTE_Components.h
+Pre_Include_Global.h
+Objects
+*.uvguix.*
+*.scvd
+
+RTE/Acceleration/ttf2c.py
+RTE/Acceleration/img2c.py
