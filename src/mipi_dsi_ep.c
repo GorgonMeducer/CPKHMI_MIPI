@@ -1101,6 +1101,8 @@ void mipi_dsi_start_display(void)
     g_vr_size = (g_display_cfg.input[0].vsize);
     g_hstride = (g_display_cfg.input[0].hstride);
 
+
+    memset(fb_background, 0, sizeof(fb_background));
 #if 0
 //    SCB_EnableDCache();
     DWT_init();
