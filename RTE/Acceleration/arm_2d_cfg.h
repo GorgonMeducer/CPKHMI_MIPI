@@ -63,7 +63,7 @@ extern "C" {
 // <i> Note that enabling this feature will add the support for a special colour type: ARM_2D_CHANNEL_8in32
 // <i> This feature is disabled by default to save code size
 #ifndef __ARM_2D_CFG_SUPPORT_COLOUR_CHANNEL_ACCESS__
-#   define __ARM_2D_CFG_SUPPORT_COLOUR_CHANNEL_ACCESS__             1
+#   define __ARM_2D_CFG_SUPPORT_COLOUR_CHANNEL_ACCESS__             0
 #endif
 
 // <q>Enable ccca8888(ARGB8888) implicit conversion 
@@ -123,6 +123,7 @@ extern "C" {
             |   ARM_2D_LOG_CHN_DIRTY_REGION_OPTIMISATION                        \
             |   ARM_2D_LOG_CHN_STATISTICS                                       \
             |   ARM_2D_LOG_CHN_CONTROLS                                         \
+            |   ARM_2D_LOG_CHN_GUI_STACK                                        \
             |   ARM_2D_LOG_CHN_APP)
 #endif
 
@@ -195,14 +196,14 @@ extern "C" {
 // <i> The width of your screen for running benchmark
 // <i> Default: 320
 #ifndef __GLCD_CFG_SCEEN_WIDTH__
-#   define __GLCD_CFG_SCEEN_WIDTH__                                     800
+#   define __GLCD_CFG_SCEEN_WIDTH__                                     320
 #endif
 
 // <o>Height of the screen <8-32767>
 // <i> The height of your screen for running benchmark
 // <i> Default: 240
 #ifndef __GLCD_CFG_SCEEN_HEIGHT__
-#   define __GLCD_CFG_SCEEN_HEIGHT__                                    1280
+#   define __GLCD_CFG_SCEEN_HEIGHT__                                    240
 #endif
 
 // <o>Number of iterations <1-2000>
