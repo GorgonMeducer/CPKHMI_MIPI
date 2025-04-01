@@ -1054,22 +1054,67 @@ void show_pattern(color_pattern_t pattern)
 
 #define GLCD_LANDSCAPE      0
 
-#if __DISP0_CFG_COLOUR_DEPTH__ == 16
 #   include "__arm_2d_impl.h"
-#endif
 
-void Disp0_DrawBitmap (uint32_t x, uint32_t y, uint32_t width, uint32_t height, const uint8_t *bitmap) 
+void GLCD_DrawBitmap (uint32_t x, uint32_t y, uint32_t width, uint32_t height, const uint8_t *bitmap) 
 {
 
     uint16_t *phwDes = (uint16_t *)&fb_background[0][0] + y * g_hz_size + x;
     uint16_t *phwSrc = (uint16_t *)bitmap;
     for (int_fast16_t i = 0; i < height; i++) {
-        memcpy ((uint16_t *)phwDes, phwSrc, width * 2);
+        memcpy ((uint32_t *)phwDes, (uint32_t *)phwSrc, width * 2);
         SCB_CleanDCache_by_Addr(phwDes, width * 2);
         phwSrc += width;
         phwDes += g_hz_size;
     }
 
+}
+
+
+void Disp0_DrawBitmap(uint32_t x, uint32_t y, uint32_t width, uint32_t height, const uint8_t *bitmap)
+{
+#if __DISP0_CFG_COLOUR_DEPTH__ == 8
+    extern
+    void __arm_2d_impl_gray8_to_rgb565( uint8_t *__RESTRICT pchSourceBase,
+                                        int16_t iSourceStride,
+                                        uint16_t *__RESTRICT phwTargetBase,
+                                        int16_t iTargetStride,
+                                        arm_2d_size_t *__RESTRICT ptCopySize);
+
+    static uint16_t s_hwFrameBuffer[__DISP0_CFG_PFB_BLOCK_WIDTH__ * __DISP0_CFG_PFB_BLOCK_HEIGHT__];
+    
+    arm_2d_size_t size = {
+        .iWidth = width,
+        .iHeight = height,
+    };
+    __arm_2d_impl_gray8_to_rgb565( (uint8_t *)bitmap,
+                                    width,
+                                    (uint16_t *)s_hwFrameBuffer,
+                                    width,
+                                    &size);
+    GLCD_DrawBitmap(x, y, width, height, (const uint8_t *)s_hwFrameBuffer);
+
+#elif __DISP0_CFG_COLOUR_DEPTH__ == 32
+    extern
+    void __arm_2d_impl_cccn888_to_rgb565(uint32_t *__RESTRICT pwSourceBase,
+                                        int16_t iSourceStride,
+                                        uint16_t *__RESTRICT phwTargetBase,
+                                        int16_t iTargetStride,
+                                        arm_2d_size_t *__RESTRICT ptCopySize);
+
+    arm_2d_size_t size = {
+        .iWidth = width,
+        .iHeight = height,
+    };
+    __arm_2d_impl_cccn888_to_rgb565((uint32_t *)bitmap,
+                                    width,
+                                    (uint16_t *)bitmap,
+                                    width,
+                                    &size);
+    GLCD_DrawBitmap(x, y, width, height, bitmap);
+#else
+    GLCD_DrawBitmap(x, y, width, height, bitmap);
+#endif
 }
 
 #if defined(RTE_CMSIS_Compiler_STDOUT_Custom)
@@ -1225,7 +1270,10 @@ void mipi_dsi_start_display(void)
 #ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
     arm_2d_run_benchmark();
 #else
-    arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
+    //arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
+    //arm_2d_scene_transform_init(&DISP0_ADAPTER);
+    //arm_2d_scene_tjpgd_init(&DISP0_ADAPTER);
+    arm_2d_scene_audiomark_init(&DISP0_ADAPTER);
 //    arm_2d_scene_player_register_before_switching_event_handler(
 //            &DISP0_ADAPTER,
 //            before_scene_switching_handler);
@@ -1234,7 +1282,7 @@ void mipi_dsi_start_display(void)
 #endif
 
     while(1) {
-        disp_adapter0_task(30);
+        disp_adapter0_task(60);
     }
 
 
