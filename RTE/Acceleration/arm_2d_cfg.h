@@ -52,7 +52,6 @@ extern "C" {
 // <o>Enable Anti-Alias support for all transform operations.
 //     <0=>     No Anti-Alias
 //     <1=>     Use 4x Supersampling Anti-Alias (4xSSAA)
-//     <2=>     Use 2x Supersampling Anti-Alias (2xSSAA)
 // <i> Note that enabling this feature suffers a non-negligible performance drop.
 // <i> This feature is disabled by default.
 #ifndef __ARM_2D_HAS_ANTI_ALIAS_TRANSFORM__
@@ -69,7 +68,7 @@ extern "C" {
 // <q>Enable ccca8888(ARGB8888) implicit conversion 
 // <i> This feature is disabled by default to save code size
 #ifndef __ARM_2D_CFG_SUPPORT_CCCA8888_IMPLICIT_CONVERSION__
-#   define __ARM_2D_CFG_SUPPORT_CCCA8888_IMPLICIT_CONVERSION__      0
+#   define __ARM_2D_CFG_SUPPORT_CCCA8888_IMPLICIT_CONVERSION__      1
 #endif
 
 // <q>Improve the Quality of IIR Blur
@@ -168,13 +167,12 @@ extern "C" {
 #   define __ARM_2D_CFG_OPTIMIZE_FOR_HOLLOW_OUT_MASK_IN_TRANSFORM__         0
 #endif
 
-// <q> Ignore the user application code when a PFB is output of the areas that generated with the layout assistant. Enabling this feature can improve the user application performance.
-// <i> This feature is disabled by default. It is recommended when you trys to optimize the application performance.
+// <q> Improve the User Application Performance with optimization in Layout Assistant. 
+// <i> Ignore the user application code when a PFB is output of the areas that generated with the layout assistant. Enabling this feature can improve the user application performance. This feature is disabled by default. It is recommended when you trys to optimize the application performance.
 // <i> If you see some visual elements are imcomplete, you can choose those layout assistants with "_open" as posfix in corresonding area. For example, arm_2d_align_centre() can be changed to arm_2d_align_centre_open().
 #ifndef __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__
-#   define __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__              1
+#   define __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__              0
 #endif
-
 // </h>
 
 
@@ -203,14 +201,14 @@ extern "C" {
 // <i> The width of your screen for running benchmark
 // <i> Default: 320
 #ifndef __GLCD_CFG_SCEEN_WIDTH__
-#   define __GLCD_CFG_SCEEN_WIDTH__                                     800
+#   define __GLCD_CFG_SCEEN_WIDTH__                                     320
 #endif
 
 // <o>Height of the screen <8-32767>
 // <i> The height of your screen for running benchmark
 // <i> Default: 240
 #ifndef __GLCD_CFG_SCEEN_HEIGHT__
-#   define __GLCD_CFG_SCEEN_HEIGHT__                                    1280
+#   define __GLCD_CFG_SCEEN_HEIGHT__                                    240
 #endif
 
 // <o>Number of iterations <1-2000>

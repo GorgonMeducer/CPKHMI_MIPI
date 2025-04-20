@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-#ifndef __ARM_2D_SCENE_TJPGD_H__
-#define __ARM_2D_SCENE_TJPGD_H__
+#ifndef __ARM_2D_SCENE_MATRIX_H__
+#define __ARM_2D_SCENE_MATRIX_H__
 
 /*============================ INCLUDES ======================================*/
 
@@ -25,11 +25,10 @@
 #   include "RTE_Components.h"
 #endif
 
-#if defined(RTE_Acceleration_Arm_2D_Helper_PFB)                                 \
- && defined(RTE_Acceleration_Arm_2D_Extra_TJpgDec_Loader)
+#if defined(RTE_Acceleration_Arm_2D_Helper_PFB)
 
 #include "arm_2d_helper.h"
-#include "arm_2d_example_loaders.h"
+#include "arm_2d_example_controls.h"
 
 #ifdef   __cplusplus
 extern "C" {
@@ -52,52 +51,90 @@ extern "C" {
 /*============================ MACROS ========================================*/
 
 /* OOC header, please DO NOT modify  */
-#ifdef __USER_SCENE_TJPGD_IMPLEMENT__
+#ifdef __USER_SCENE_MATRIX_IMPLEMENT__
 #   define __ARM_2D_IMPL__
 #endif
-#ifdef __USER_SCENE_TJPGD_INHERIT__
+#ifdef __USER_SCENE_MATRIX_INHERIT__
 #   define __ARM_2D_INHERIT__
 #endif
 #include "arm_2d_utils.h"
 
-#ifndef ARM_2D_DEMO_TJPGD_USE_FILE
-#   define ARM_2D_DEMO_TJPGD_USE_FILE  0
+#ifndef MATRIX_LETTER_TRAIN_USE_BLUR
+#   define MATRIX_LETTER_TRAIN_USE_BLUR           0
 #endif
+
+
+#ifndef MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT
+#   define MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT    30
+#endif
+
+#ifndef MATRIX_LETTER_TRAIN_MID_STAGE_COUNT
+#   define MATRIX_LETTER_TRAIN_MID_STAGE_COUNT    30
+#endif
+
+#ifndef MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT
+#   define MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT   10
+#endif
+
+#if !MATRIX_LETTER_TRAIN_USE_BLUR
+#   undef MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT
+#   define MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT      0
+#endif
+
+#define MATRIX_LETTER_TRAIN_COUNT                   \
+        (   MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT     \
+        +   MATRIX_LETTER_TRAIN_MID_STAGE_COUNT     \
+        +   MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT    )
 
 /*============================ MACROFIED FUNCTIONS ===========================*/
 
 /*!
- * \brief initalize scene_tjpgd and add it to a user specified scene player
+ * \brief initalize scene_matrix and add it to a user specified scene player
  * \param[in] __DISP_ADAPTER_PTR the target display adapter (i.e. scene player)
  * \param[in] ... this is an optional parameter. When it is NULL, a new 
- *            user_scene_tjpgd_t will be allocated from HEAP and freed on
+ *            user_scene_matrix_t will be allocated from HEAP and freed on
  *            the deposing event. When it is non-NULL, the life-cycle is managed
  *            by user.
- * \return user_scene_tjpgd_t* the user_scene_tjpgd_t instance
+ * \return user_scene_matrix_t* the user_scene_matrix_t instance
  */
-#define arm_2d_scene_tjpgd_init(__DISP_ADAPTER_PTR, ...)                    \
-            __arm_2d_scene_tjpgd_init((__DISP_ADAPTER_PTR), (NULL, ##__VA_ARGS__))
+#define arm_2d_scene_matrix_init(__DISP_ADAPTER_PTR, ...)                       \
+            __arm_2d_scene_matrix_init( (__DISP_ADAPTER_PTR),                   \
+                                        (NULL, ##__VA_ARGS__))
 
 /*============================ TYPES =========================================*/
-/*!
- * \brief a user class for scene tjpgd
- */
-typedef struct user_scene_tjpgd_t user_scene_tjpgd_t;
 
-struct user_scene_tjpgd_t {
+typedef struct {
+    arm_2d_region_t tRegion;
+
+    uint32_t u2Stage            : 2;
+    uint32_t                    : 6;
+    uint32_t u8RandomSeed       : 8;
+    uint32_t u16NumberOfChars   : 16;
+
+    
+
+
+} __letter_train_t;
+
+
+/*!
+ * \brief a user class for scene matrix
+ */
+typedef struct user_scene_matrix_t user_scene_matrix_t;
+
+struct user_scene_matrix_t {
     implement(arm_2d_scene_t);                                                  //! derived from class: arm_2d_scene_t
 
 ARM_PRIVATE(
     /* place your private member here, following two are examples */
-    int64_t lTimestamp[1];
+    int64_t lTimestamp[2];
     bool bUserAllocated;
 
-    arm_tjpgd_loader_t tJPGBackground;
-    union {
-        arm_tjpgd_io_file_loader_t tFile;
-        arm_tjpgd_io_binary_loader_t tBinary;
-    } LoaderIO;
+#if MATRIX_LETTER_TRAIN_USE_BLUR
+    arm_2d_filter_iir_blur_descriptor_t tBlurOP;
+#endif
 
+    __letter_train_t tTrains[MATRIX_LETTER_TRAIN_COUNT];
 )
     /* place your public member here */
     
@@ -108,9 +145,9 @@ ARM_PRIVATE(
 
 ARM_NONNULL(1)
 extern
-user_scene_tjpgd_t *__arm_2d_scene_tjpgd_init(
+user_scene_matrix_t *__arm_2d_scene_matrix_init(
                                         arm_2d_scene_player_t *ptDispAdapter, 
-                                        user_scene_tjpgd_t *ptScene);
+                                        user_scene_matrix_t *ptScene);
 
 #if defined(__clang__)
 #   pragma clang diagnostic pop
@@ -118,8 +155,8 @@ user_scene_tjpgd_t *__arm_2d_scene_tjpgd_init(
 #   pragma GCC diagnostic pop
 #endif
 
-#undef __USER_SCENE_TJPGD_IMPLEMENT__
-#undef __USER_SCENE_TJPGD_INHERIT__
+#undef __USER_SCENE_MATRIX_IMPLEMENT__
+#undef __USER_SCENE_MATRIX_INHERIT__
 
 #ifdef   __cplusplus
 }
