@@ -1270,7 +1270,8 @@ void mipi_dsi_start_display(void)
 #ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
     arm_2d_run_benchmark();
 #else
-    arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
+    //arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
+    arm_2d_scene_matrix_init(&DISP0_ADAPTER);
     //arm_2d_scene_transform_init(&DISP0_ADAPTER);
     //arm_2d_scene_tjpgd_init(&DISP0_ADAPTER);
     //arm_2d_scene_audiomark_init(&DISP0_ADAPTER);
