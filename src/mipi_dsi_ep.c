@@ -32,7 +32,7 @@
 #include "r_mipi_dsi.h"
 #include "hal_data.h"
 #include "common_utils.h"
-#include "arm_mve.h"
+//#include "arm_mve.h"
 #include "perf_counter.h"
 
 #include "arm_2d_helper.h"
