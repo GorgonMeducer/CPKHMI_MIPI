@@ -75,7 +75,7 @@ extern "C" {
 // <i> Note that enabling this feature will half the performance of IIR Blur and only works correctly in Full framebuffer mode
 // <i> This feature is disabled by default to improve performance
 #ifndef __ARM_2D_CFG_USE_IIR_BLUR_REVERSE_PATH__
-#   define __ARM_2D_CFG_USE_IIR_BLUR_REVERSE_PATH__                 0
+#   define __ARM_2D_CFG_USE_IIR_BLUR_REVERSE_PATH__                 1
 #endif
 
 // <q>Support Scaling for A1, A2 and A4 fonts
@@ -152,6 +152,15 @@ extern "C" {
 //#define __ARM_2D_CFG_UNSAFE_NO_SATURATION_IN_FIXED_POINT__ 
 // </c>
 
+// <c1> Remove the Helium RGB565 Patch in IIR Blur operations
+// <i> This option is used to remove helium rgb565 patch in IIR Blur to gain a better performance, a ghost-shadow effects might noticible when background is white or light.
+//#define __ARM_2D_CFG_UNSAFE_NO_HELIUM_RGB565_PATCH_IN_IIR_BLUR__ 
+// </c>
+
+// <c1> Remove the PFB support in IIR Blur Helium acceleration
+// <i> This option is used to remove the PFB support in IIR Blur Helium backend to gain a better performance.
+//#define __ARM_2D_CFG_UNSAFE_NO_PFB_SUPPORT_IN_IIR_BLUR_HELIUM__ 
+// </c>
 
 // <q> Optimize the scaler version of transform operations for pointer-like resources
 // <i> This feature is enabled by default. There is no guarantee that the performance will increase or decrease. It is all depends your applications. In most of the case, enabling it helps.
@@ -171,8 +180,9 @@ extern "C" {
 // <i> Ignore the user application code when a PFB is output of the areas that generated with the layout assistant. Enabling this feature can improve the user application performance. This feature is disabled by default. It is recommended when you trys to optimize the application performance.
 // <i> If you see some visual elements are imcomplete, you can choose those layout assistants with "_open" as posfix in corresonding area. For example, arm_2d_align_centre() can be changed to arm_2d_align_centre_open().
 #ifndef __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__
-#   define __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__              1
+#   define __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__              0
 #endif
+
 // </h>
 
 
@@ -201,14 +211,14 @@ extern "C" {
 // <i> The width of your screen for running benchmark
 // <i> Default: 320
 #ifndef __GLCD_CFG_SCEEN_WIDTH__
-#   define __GLCD_CFG_SCEEN_WIDTH__                                     800
+#   define __GLCD_CFG_SCEEN_WIDTH__                                     320
 #endif
 
 // <o>Height of the screen <8-32767>
 // <i> The height of your screen for running benchmark
 // <i> Default: 240
 #ifndef __GLCD_CFG_SCEEN_HEIGHT__
-#   define __GLCD_CFG_SCEEN_HEIGHT__                                    1280
+#   define __GLCD_CFG_SCEEN_HEIGHT__                                    240
 #endif
 
 // <o>Number of iterations <1-2000>

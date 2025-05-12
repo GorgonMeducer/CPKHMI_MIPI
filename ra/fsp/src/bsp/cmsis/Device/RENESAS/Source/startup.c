@@ -82,7 +82,7 @@ void Reset_Handler (void)
     memset((uint64_t *)DTCM_START, 0, DTCM_LENGTH);
     memset((uint64_t *)(ITCM_START + 8), 0, ITCM_LENGTH - 8);
     __set_MSP(uMSP);
-    
+
     (*(volatile uint64_t *)ITCM_START) = 0;
 
     /* Initialize system using BSP. */

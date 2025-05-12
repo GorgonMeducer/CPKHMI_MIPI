@@ -40,6 +40,8 @@
 #include "arm_2d_scenes.h"
 #include "arm_2d_demos.h"
 
+#include "arm_2d_scene_bubble_charging.h"
+
 #ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
 #   include "arm_2d_benchmark.h"
 #endif
@@ -1271,7 +1273,10 @@ void mipi_dsi_start_display(void)
     arm_2d_run_benchmark();
 #else
     //arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
-    arm_2d_scene_matrix_init(&DISP0_ADAPTER);
+    arm_2d_scene_progress_status_init(&DISP0_ADAPTER);
+    //arm_2d_scene_bubble_charging_init(&DISP0_ADAPTER);
+    //arm_2d_scene_matrix_init(&DISP0_ADAPTER);
+    //arm_2d_scene_filters_init(&DISP0_ADAPTER);
     //arm_2d_scene_transform_init(&DISP0_ADAPTER);
     //arm_2d_scene_tjpgd_init(&DISP0_ADAPTER);
     //arm_2d_scene_audiomark_init(&DISP0_ADAPTER);
